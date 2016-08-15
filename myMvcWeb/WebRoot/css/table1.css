@@ -1,0 +1,20 @@
+body{
+	text-align: center;
+}
+table{
+	border: 1px solid blue;
+	width:600px;
+	border-collapse: collapse;
+}
+td{
+	text-align:center;
+	border: 1px solid blue;
+}
+th{
+	text-align:center;
+	border: 1px solid blue;
+}
+div{
+	 margin:0 auto;
+	 width:600px;
+}

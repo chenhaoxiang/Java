@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="myMvcWeb"
+  id="myeclipse.1470034336783"
+  context-root="/myMvcWeb"
+  j2ee-spec="6.0"
+  archive="myMvcWeb.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+
