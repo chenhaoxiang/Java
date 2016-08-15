@@ -1,0 +1,3 @@
+BasicDataSource创建DataSource(DBCP连接池配置)
+ComboPooledDataSource(C3P0连接池配置)
+Apache的DBUtils框架使用
