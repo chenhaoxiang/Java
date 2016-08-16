@@ -1,0 +1,32 @@
+body{
+	text-align: center;
+}
+table{
+	border: 1px solid blue;
+	width: 500px;
+	border-collapse: collapse;/*为表格设置合并边框模型：*/
+	margin: auto;
+}
+td,th,tr{
+	border:  1px solid blue;
+}
+.pc{
+    width: 30px;
+    height: 30px;
+    border: 1px solid #e1e2e3;
+    border-top-color: rgb(225, 226, 227);
+    border-top-style: solid;
+    border-top-width: 1px;
+    border-right-color: rgb(225, 226, 227);
+    border-right-style: solid;
+    border-right-width: 1px;
+    border-bottom-color: rgb(225, 226, 227);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-left-color: rgb(225, 226, 227);
+    border-left-style: solid;
+    border-left-width: 1px;
+}
+.now {
+    display: block;
+}
