@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app version="3.0" 
+	xmlns="http://java.sun.com/xml/ns/javaee" 
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee 
+	http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd">
+  <display-name></display-name>	
+  
+  <listener>
+  	<listener-class>cn.hncu.listeners.MyServletContextListener</listener-class>
+  </listener>
+  <listener>
+  	<listener-class>cn.hncu.listeners.MySessionListener</listener-class>
+  </listener>
+  
+  <servlet>
+    <servlet-name>LoginServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.LoginServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>LogOutServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.LogOutServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>ShowServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.ShowServlet</servlet-class>
+  </servlet>
+  <servlet>
+    <servlet-name>KickOutServlet</servlet-name>
+    <servlet-class>cn.hncu.servlet.KickOutServlet</servlet-class>
+  </servlet>
+
+  <servlet-mapping>
+    <servlet-name>LoginServlet</servlet-name>
+    <url-pattern>/LoginServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>LogOutServlet</servlet-name>
+    <url-pattern>/servlet/LogOutServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>ShowServlet</servlet-name>
+    <url-pattern>/servlet/ShowServlet</url-pattern>
+  </servlet-mapping>
+  <servlet-mapping>
+    <servlet-name>KickOutServlet</servlet-name>
+    <url-pattern>/servlet/KickOutServlet</url-pattern>
+  </servlet-mapping>
+  
+  <filter>
+  	<filter-name>charset</filter-name>
+  	<filter-class>cn.hncu.filter.CharsetFilter</filter-class>
+  </filter>
+  <filter>
+    <filter-name>login</filter-name>
+    <filter-class>cn.hncu.filter.LoginFilter</filter-class>
+  </filter>
+  
+
+  <filter-mapping>
+    <filter-name>login</filter-name>
+    <url-pattern>/servlet/*</url-pattern>
+    <url-pattern>/jsps/*</url-pattern>
+  </filter-mapping>
+  <filter-mapping>
+  	<filter-name>charset</filter-name>
+  	<url-pattern>/*</url-pattern>
+  </filter-mapping>
+  
+  <welcome-file-list>
+    <welcome-file>index.jsp</welcome-file>
+  </welcome-file-list>
+</web-app>
