@@ -1,7 +1,7 @@
 package cn.hncu.domain;
 
 /**
- * @author ³ÂºÆÏè
+ * @author é™ˆæµ©ç¿”
  *
  * 2016-8-25
  */
@@ -11,6 +11,19 @@ public class Book {
 	private double inPrice;
 	private double outPrice;
 	private int num;
+	
+	public Book() {
+		super();
+	}
+	public Book(String uuid, String name, double inPrice, double outPrice,
+			int num) {
+		super();
+		this.uuid = uuid;
+		this.name = name;
+		this.inPrice = inPrice;
+		this.outPrice = outPrice;
+		this.num = num;
+	}
 	public String getUuid() {
 		return uuid;
 	}

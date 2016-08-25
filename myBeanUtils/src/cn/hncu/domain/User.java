@@ -1,7 +1,7 @@
 package cn.hncu.domain;
 
 /**
- * @author ³ÂºÆÏè
+ * @author é™ˆæµ©ç¿”
  *
  * 2016-8-25
  */
@@ -9,6 +9,17 @@ public class User {
 	private String uuid;
 	private String name;
 	private int age;
+	public User() {
+		super();
+	}
+	
+	public User(String uuid, String name, int age) {
+		super();
+		this.uuid = uuid;
+		this.name = name;
+		this.age = age;
+	}
+
 	public String getUuid() {
 		return uuid;
 	}

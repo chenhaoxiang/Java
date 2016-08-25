@@ -10,29 +10,29 @@ public class MyBeanUtils1 {
 	public static Object populate(Class cls ,Map map) throws InstantiationException, IllegalAccessException, IllegalArgumentException, InvocationTargetException, NoSuchMethodException, SecurityException{
 		Object obj = null;
 		
-		//1¡¢ÓÃÀà·´Éänew³ö¶ÔÏó
+		//1ã€ç”¨ç±»åå°„newå‡ºå¯¹è±¡
 		obj = cls.newInstance();
 		
-		//2 ÔÙÓÃÀà·´Éä¶ÔĞÂnewµÄ¶ÔÏóÉèÖÃÊôĞÔÖµ(±ØĞë×ñÊØJavaÉèÖÃ¹æ·¶)--¼´Í¨¹ısetter·½·¨ÉèÖÃ
-		//2.1±éÀú³öËùÓĞ¸ÃÀàÉùÃ÷µÄÊôĞÔ
-		Field flds[] = cls.getDeclaredFields();//getDeclaredFields()·µ»ØClassÖĞËùÓĞµÄ×Ö¶Î£¬°üÀ¨Ë½ÓĞ×Ö¶Î£»
+		//2 å†ç”¨ç±»åå°„å¯¹æ–°newçš„å¯¹è±¡è®¾ç½®å±æ€§å€¼(å¿…é¡»éµå®ˆJavaè®¾ç½®è§„èŒƒ)--å³é€šè¿‡setteræ–¹æ³•è®¾ç½®
+		//2.1éå†å‡ºæ‰€æœ‰è¯¥ç±»å£°æ˜çš„å±æ€§
+		Field flds[] = cls.getDeclaredFields();//getDeclaredFields()è¿”å›Classä¸­æ‰€æœ‰çš„å­—æ®µï¼ŒåŒ…æ‹¬ç§æœ‰å­—æ®µï¼›
 		for(Field fld:flds){
-			//»ñÈ¡¸Ãfld¶ÔÏóËù´ú±íµÄÊôĞÔÃû
+			//è·å–è¯¥fldå¯¹è±¡æ‰€ä»£è¡¨çš„å±æ€§å
 			String fldName = fld.getName();
-			//¸ù¾İÊôĞÔÃû£¬µ½mapÖĞÈ¥¶ÁÈ¡Êı¾İ£¬Ö»ÓĞÊı¾İ·Ç¿Õ²ÅĞèÒª¸ø¸ÃÊôĞÔÉèÖÃÖµ 
+			//æ ¹æ®å±æ€§åï¼Œåˆ°mapä¸­å»è¯»å–æ•°æ®ï¼Œåªæœ‰æ•°æ®éç©ºæ‰éœ€è¦ç»™è¯¥å±æ€§è®¾ç½®å€¼ 
 			Object value = map.get(fldName);
-			if(value==null){//Èç¹ûmapÖĞ²»´æÔÚ¶ÔÓ¦µÄÊôĞÔÊı¾İ£¬ÎÒÃÇÔÚÕâÀï¸ø³öÌáÊ¾ĞÅÏ¢
-				System.out.println(fldName+"µÄÊı¾İÎª¿Õ");
+			if(value==null){//å¦‚æœmapä¸­ä¸å­˜åœ¨å¯¹åº”çš„å±æ€§æ•°æ®ï¼Œæˆ‘ä»¬åœ¨è¿™é‡Œç»™å‡ºæç¤ºä¿¡æ¯
+				System.out.println(fldName+"çš„æ•°æ®ä¸ºç©º");
 			}else{
-				//Èç¹ûmapÖĞ´æÔÚ¶ÔÓ¦µÄÊôĞÔÊı¾İ£¬ÔòÓÉÊôĞÔÃûµÃ³öËüµÄsetter·½·¨µÄÃû×Ö
+				//å¦‚æœmapä¸­å­˜åœ¨å¯¹åº”çš„å±æ€§æ•°æ®ï¼Œåˆ™ç”±å±æ€§åå¾—å‡ºå®ƒçš„setteræ–¹æ³•çš„åå­—
 				String mothodName = "set"+fldName.substring(0, 1).toUpperCase()+fldName.substring(1);
 				
-				 //¸ù¾İ·½·¨ÃûºÍ²ÎÊıµÄÊı¾İÀàĞÍ(ÆäÊµ¾ÍÊÇÊôĞÔµÄÀàĞÍ)£¬»ñµÃMethod¶ÔÏó
+				 //æ ¹æ®æ–¹æ³•åå’Œå‚æ•°çš„æ•°æ®ç±»å‹(å…¶å®å°±æ˜¯å±æ€§çš„ç±»å‹)ï¼Œè·å¾—Methodå¯¹è±¡
 				Class paramTypes[] = new Class[1];
 				paramTypes[0] = fld.getType();
 				Method method = cls.getDeclaredMethod(mothodName, paramTypes);
 				
-				//µ÷ÓÃ¸Ãmethod¶ÔÏóËù´ú±íµÄ·½·¨
+				//è°ƒç”¨è¯¥methodå¯¹è±¡æ‰€ä»£è¡¨çš„æ–¹æ³•
 				Object args[] = new Object[1];
 				args[0]=value;
 				method.invoke(obj, args);
