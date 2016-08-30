@@ -89,6 +89,11 @@ td {
 				<td><input type="text" name="studName"></td>
 			</tr>
 			<tr>
+				<td>年龄<font color="red">*</font>
+				</td>
+				<td><input type="text" name="age"></td>
+			</tr>
+			<tr>
 				<td>学院编号<font color="red">*</font>
 				</td>
 				<td><input type="text" name="deptId"></td>

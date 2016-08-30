@@ -39,7 +39,6 @@ public class DemoJdbcDao {
 		Session s = HibernateSessionFactory.getSession();
 		Transaction tran = s.beginTransaction();
 		try {
-			System.out.println(stud.getsName());
 			s.saveOrUpdate(stud);
 			tran.commit();
 		} catch (HibernateException e) {
