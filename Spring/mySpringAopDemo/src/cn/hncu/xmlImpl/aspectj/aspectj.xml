@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	<!-- 自动代理 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	
+	<bean id="p" class="cn.hncu.xmlImpl.aspectj.Person"></bean>
+	
+	<!-- 切面=切点+通知 (把切点和通知写成内部bean)-->
+	<bean id="cut" class="org.springframework.aop.aspectj.AspectJExpressionPointcut">
+		<!-- 拦截:cn.hncu包下，类名以"son"结束,至少有1个参数(类型不限)，返回值类型任意的方法 -->
+	  <property name="expression" value="execution( * cn.hncu..*son.*(*,..) )"></property>	  
+	</bean>
+	
+	<bean id="advisor" class="org.springframework.aop.support.DefaultPointcutAdvisor">
+	   <property name="pointcut" ref="cut"></property>
+	   <property name="advice">
+			<bean id="advice" class="cn.hncu.xmlImpl.aspectj.AroundAdvice"></bean>
+	   </property>
+	</bean>
+	
+
+</beans>
