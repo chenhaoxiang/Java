@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:context="http://www.springframework.org/schema/context"
+	xmlns:tx="http://www.springframework.org/schema/tx"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.3.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.3.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.3.xsd">
+	
+	<!-- 使用jdbc.properties配置文件,就要写下面这句 -->
+<!-- 	<context:property-placeholder location="WEB-INF/conf/jdbc.properties"/> -->
+	<bean id="dataSource" class="org.springframework.jdbc.datasource.SimpleDriverDataSource">
+		<!-- 使用jdbc.properties配置文件,类似如下配置 -->
+<!-- 		<property name="driverClass" value="${driver}"></property> -->
+		<property name="driverClass" value="com.mysql.jdbc.Driver"></property> 
+		<property name="url" value="jdbc:mysql:///mydb?characterEncoding=UTF-8"></property> 
+		<property name="username" value="root"></property> 
+		<property name="password" value="1234"></property> 
+	</bean>
+	
+	<!-- 自动代理 -->
+	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator"></bean>
+	<!-- 事务  切面=切点+通知 -->
+	<bean id="tx" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+		<!-- 拦截cn.hncu包下的，方法名最后为Service的任意返回值任意参数的方法 -->
+		<property name="expression" value="execution (* cn.hncu..*Service.*(..) )">
+		</property>
+		<property name="advice">
+			<bean class="cn.hncu.utils.TxAdvice"></bean>
+		</property>
+	</bean>
+	
+	<bean id="conClose" class="org.springframework.aop.aspectj.AspectJExpressionPointcutAdvisor">
+	   <property name="expression" value="execution( * *..*.*.getConnection() )"></property>
+	   <property name="advice">
+			<bean id="advice" class="cn.hncu.utils.CloseAdvice"></bean>
+	   </property>
+	</bean>
+
+</beans>
