@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-mapping PUBLIC "-//Hibernate/Hibernate Mapping DTD 3.0//EN"
+"http://hibernate.sourceforge.net/hibernate-mapping-3.0.dtd">
+
+<hibernate-mapping package="cn.hncu.domain">
+	
+	<!--name指的是POJO类的类名，table是数据库的表名，catalog是数据库的名称  -->
+	<class name="Student" table="students" catalog="hib">
+		<!--id表示此字段为数据库的主键，这里也可以用property来写，name为Student类的成员变量名，type为类型的包全名  -->
+		<id name="sId" type="java.lang.String">
+			<!--column表示映射的数据库的字段，name表示数据库中字段名，length表示varchar/char型的长度  -->
+			<column name="sId" length="8"></column>
+		</id>
+		<property name="sName" type="java.lang.String">
+			<column name="sName" length="40" />
+		</property>
+		<property name="sAge" type="java.lang.Integer">
+			<column name="sAge" />
+		</property>
+	</class>
+
+</hibernate-mapping>

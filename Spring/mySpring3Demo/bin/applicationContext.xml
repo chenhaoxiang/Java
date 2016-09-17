@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:tx="http://www.springframework.org/schema/tx"
+		xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd
+				http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-3.0.xsd
+				http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-3.0.xsd">
+	
+	<!--scope属性值设为:prototype(每次获取都是一个新对象), request(同一个request中获取到的是同一个), session ,不设置，默认是单例 -->
+	<bean id="p" class="cn.hncu.demo1.domain.Person">
+		<!-- 配置好初始值 -->
+		<property name="name" value="张三"></property>
+		<property name="age" value="23"></property>
+	</bean>
+	
+	<!-- 注意这里的class是实现类，而不是接口哦 -->
+	<!-- 如果换实现类了，只需把这里的class变了就可以了,或者不动这里，增加一个bean -->
+	<bean id="dao" class="cn.hncu.demo1.login.dao.LoginDaoJdbc2">
+	</bean>
+	
+	<!-- 注意这里的class也是实现类，而不是接口哦 -->
+	<bean id="s" class="cn.hncu.demo1.login.service.LoginServiceImpl">
+		<!-- 实现类中还有变量，ref是另外的bean的id-引用 -->
+		<property name="dao" ref="dao"></property>		
+	</bean>
+		
+	<bean id="login" class="cn.hncu.demo1.login.LoginAction">
+		<property name="service" ref="s"></property>
+		<property name="person" ref="p"></property>
+	</bean>
+	
+	
+	
+	
+</beans>

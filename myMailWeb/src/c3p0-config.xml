@@ -1,0 +1,21 @@
+﻿<c3p0-config>
+	<!-- 默认配置，如果没有指定则使用这个配置 -->
+	<default-config>
+		<property name="driverClass">com.mysql.jdbc.Driver</property>
+		<property name="jdbcUrl">
+			<![CDATA[jdbc:mysql://127.0.0.1:3306/hncu?useUnicode=true&characterEncoding=utf-8]]>
+		</property>
+		<property name="user">root</property>
+		<property name="password">1234</property>
+		<!-- 初始化池大小 -->
+		<property name="initialPoolSize">2</property>
+		<!-- 最大空闲时间 -->
+		<property name="maxIdleTime">30</property>
+		<!-- 最多有多少个连接 -->
+		<property name="maxPoolSize">10</property>
+		<!-- 最少几个连接 -->
+		<property name="minPoolSize">2</property>
+		<!-- 每次最多可以执行多少个批处理语句 -->
+		<property name="maxStatements">50</property>
+	</default-config> 
+</c3p0-config> 
