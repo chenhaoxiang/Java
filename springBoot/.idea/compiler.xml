@@ -22,11 +22,11 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <processorPath useClasspath="true" />
-        <module name="highlight_spring4" />
+        <module name="springBoot" />
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="highlight_spring4" target="1.7" />
+      <module name="springBoot" target="1.7" />
     </bytecodeTargetLevel>
   </component>
 </project>

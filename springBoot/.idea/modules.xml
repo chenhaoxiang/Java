@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/highlight_spring4.iml" filepath="$PROJECT_DIR$/highlight_spring4.iml" />
+      <module fileurl="file://$PROJECT_DIR$/springBoot.iml" filepath="$PROJECT_DIR$/springBoot.iml" />
     </modules>
   </component>
 </project>
