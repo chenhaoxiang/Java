@@ -16,6 +16,27 @@
             <artifactId>spring-context</artifactId>
             <version>4.2.3.RELEASE</version>
         </dependency>
+
+        <!-- spring aop 支持-->
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-aop</artifactId>
+            <version>4.2.3.RELEASE</version>
+        </dependency>
+
+        <!-- aspectj支持 -->
+        <!-- https://mvnrepository.com/artifact/org.aspectj/aspectjrt -->
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjrt</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+        <dependency>
+            <groupId>org.aspectj</groupId>
+            <artifactId>aspectjweaver</artifactId>
+            <version>1.8.9</version>
+        </dependency>
+
     </dependencies>
     <build>
         <plugins>
