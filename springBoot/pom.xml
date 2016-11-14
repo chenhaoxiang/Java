@@ -17,7 +17,7 @@
             <version>4.2.3.RELEASE</version>
         </dependency>
 
-        <!-- spring aop 支持-->
+        <!-- spring aop 支持  p1_3_3_aop-->
         <dependency>
             <groupId>org.springframework</groupId>
             <artifactId>spring-aop</artifactId>
@@ -35,12 +35,20 @@
             <version>1.8.9</version>
         </dependency>
 
-        <!--简化文件操作-commons-io-->
+        <!--简化文件操作-commons-io p2_2_2SpringEL-->
         <dependency>
             <groupId>commons-io</groupId>
             <artifactId>commons-io</artifactId>
             <version>2.4</version>
         </dependency>
+
+        <!--JSR250支持  p2_3_2BeanLifecycle-->
+        <dependency>
+            <groupId>javax.annotation</groupId>
+            <artifactId>jsr250-api</artifactId>
+            <version>1.0</version>
+        </dependency>
+
 
     </dependencies>
     <build>
