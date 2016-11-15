@@ -16,6 +16,5 @@ public class DemoListener implements ApplicationListener<DemoEvent> {//实现App
     public void onApplicationEvent(DemoEvent demoEvent) {//使用onApplicationEvent方法对消息进行接受处理
         String msg = demoEvent.getMsg();
         System.out.println(this.getClass()+"监听到了bean-demoPublisher发布的消息:"+msg);
-        //监听到之后可以做其他事
     }
 }

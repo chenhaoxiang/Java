@@ -17,7 +17,9 @@ public class DemoPublisher {
     ApplicationContext applicationContext;//注入ApplicationContext用来发布事件
 
     public void publish(String msg){
-        applicationContext.publishEvent(new DemoEvent(this,msg));
+        DemoEvent demoEvent = new DemoEvent(this,msg);
+        applicationContext.publishEvent(demoEvent);//在这里的时候，会去运行DemoListener中的onApplicationEvent方法
+        System.out.println("消息:"+demoEvent.getMsg());
         //使用ApplicationContext的publishEvent方法来发布
     }
 
