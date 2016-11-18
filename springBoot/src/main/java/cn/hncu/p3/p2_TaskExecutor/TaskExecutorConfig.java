@@ -21,7 +21,7 @@ import java.util.concurrent.Executor;
 @EnableAsync //利用@EnableAsync注解开启异步任务支持
 public class TaskExecutorConfig implements AsyncConfigurer{
     //配置类实现AsyncConfigurer接口并重写getAsyncExcutor方法，并返回一个ThreadPoolTaskExevutor
-    //这样我们就获得了一个基于线程池TaskExecutor
+    //这样我们就获得了一个基于线程池的TaskExecutor
     @Override
     public Executor getAsyncExecutor() {
         ThreadPoolTaskExecutor taskExecutor = new ThreadPoolTaskExecutor();
