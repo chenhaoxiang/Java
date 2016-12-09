@@ -1,130 +1,96 @@
 ﻿#分析
 
-在前面的一篇博客中：<a href="http://blog.csdn.net/qq_26525215/article/details/53164481" target='_blank'>【Spring】Spring常用配置-Profile </a>
+所谓的元注解：其实就是可以注解到别的注解上的注解。
+而被注解的注解我们就称之为组合注解。（仔细理解，可能有点绕）
+组合注解具备元注解的功能！
 
-通过profile，我们可以获得不同的profile，我们可以获得不同的Bean。Spring4提供了一个更通用的基于条件的Bean的创建，即使用@Condition注解。
+Spring的很多注解都可以作为元注解，而且Spring本身已经有很多组合注解。
 
-@Condition根据满足某一个特定条件创建一个特定的Bean。
-比如说，当某一个jar包在一个类路径下的时候，自动配置一个或多个Bean；或者只有某个Bean被创建才会创建另外一个Bean。
+比如@Configuration就是一个组合@Component注解，表明这个类其实也是一个Bean。
+@Configuration的源码:
+```
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
 
-总的来说，就是根据特定条件来控制Bean的创建行为，这样我们可以利用这个特性来进行一些自动的配置。
+package org.springframework.context.annotation;
 
-下面这个示例将以不同的操作系统来作为条件，通过实现Condition接口，并重写其matches方法来构造判断条件。
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+import org.springframework.stereotype.Component;
 
-若在Windows系统下运行程序，则输出列表命令为dir；若在Linux操作系统下运行程序，则输出列表命令为ls。
+@Target({ElementType.TYPE})
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Component
+public @interface Configuration {
+    String value() default "";
+}
+
+```
+
+有的时候，我们可能大量同时使用到几个注解到同一个类上，这个时候，我们就可以考虑将这几个注解到别的注解上。
+
+比如下面的示例就是将@Configuration和@ComponentScan注解到一个注解上！
+
+这样，我们就可以用一个注解来表示这两个注解。
 
 #示例
 
-##先需要定义判断条件
-
-###判定Windows的条件
+##组合注解
 
 ```
-package cn.hncu.p3.p4_conditional;
+package cn.hncu.p3.p5_annotation;
 
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.context.annotation.ComponentScan;
+import org.springframework.context.annotation.Configuration;
+
+import java.lang.annotation.*;
 
 /**
  * Created with IntelliJ IDEA.
  * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:24.
- * Explain:判断Windows的条件
+ * Date: 2016/12/8.
+ * Time: 下午 4:00.
+ * Explain:组合注解
  */
-public class WindowsCondition implements Condition{
-    @Override
-    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata){
-        return context.getEnvironment().getProperty("os.name").contains("Windows");
-    }
+
+@Target(ElementType.TYPE)
+@Retention(RetentionPolicy.RUNTIME)
+@Documented
+@Configuration//组合@Configuration元注解  bean注解
+@ComponentScan//组合@ComponentScan元注解  自动扫描对应value（package路径）值下面的所有bean
+public @interface WiselyConfiguration {
+    String[] value() default {};//覆盖value参数
+    //就是覆盖@ComponentScan注解中的value参数----必须要写，否则组合注解中放入value值时会报错
 }
 
 ```
+解释一下@Documented：
+表明这个注解应该被 javadoc工具记录. 默认情况下,javadoc是不包括注解的. 但如果声明注解时指定了 @Documented,则它会被 javadoc 之类的工具处理, 所以注解类型信息也会被包括在生成的文档中.
 
-###判定Linux的条件
+##服务Bean
 
 ```
-package cn.hncu.p3.p4_conditional;
+package cn.hncu.p3.p5_annotation;
 
-import org.springframework.context.annotation.Condition;
-import org.springframework.context.annotation.ConditionContext;
-import org.springframework.core.type.AnnotatedTypeMetadata;
+import org.springframework.stereotype.Service;
 
 /**
  * Created with IntelliJ IDEA.
  * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:28.
- * Explain:判定Linux的条件
+ * Date: 2016/12/8.
+ * Time: 下午 8:17.
+ * Explain:服务Bean
  */
-public class LinuxCondition implements Condition{
-    @Override
-    public boolean matches(ConditionContext context, AnnotatedTypeMetadata metadata) {
-        return context.getEnvironment().getProperty("os.name").contains("Linux");
-    }
-}
-
-```
-
-##不同系统下Bean的类
-
-首先需要一个接口，接下来不同的Bean都需要实现这个接口。
-
-###接口
-
-```
-package cn.hncu.p3.p4_conditional;
-
-/**
- * Created with IntelliJ IDEA.
- * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:31.
- * Explain:接口-Bean需要实现的接口
- */
-public interface ListService {
-    public String showListCmd();
-}
-
-```
-###Windows下所要创建的Bean的类
-
-```
-package cn.hncu.p3.p4_conditional;
-
-/**
- * Created with IntelliJ IDEA.
- * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:41.
- * Explain:Windows下所要创建的Bean的类
- */
-public class WindowsListService implements ListService {
-    @Override
-    public String showListCmd() {
-        return "dir";
-    }
-}
-
-```
-
-###Linux下所要创建的Bean的类
-
-```
-package cn.hncu.p3.p4_conditional;
-
-/**
- * Created with IntelliJ IDEA.
- * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:42.
- * Explain:Linux下所要创建的Bean的类
- */
-public class LinuxListService implements ListService {
-    @Override
-    public String showListCmd() {
-        return "ls";
+@Service
+public class DemoService {
+    public void outputResult(){
+        System.out.println("从组合注解配置照样获得的bean");
     }
 }
 
@@ -132,60 +98,46 @@ public class LinuxListService implements ListService {
 
 ##配置类
 
-```
-package cn.hncu.p3.p4_conditional;
+现在就只需要我们自定义的那个注解就可以代表那两个注解了。
 
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.Conditional;
-import org.springframework.context.annotation.Configuration;
+```
+package cn.hncu.p3.p5_annotation;
 
 /**
  * Created with IntelliJ IDEA.
  * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:48.
- * Explain:配置类
+ * Date: 2016/12/8.
+ * Time: 下午 8:19.
+ * Explain:配置类--组合注解
  */
-@Configuration
-public class ConditionConfig {
-    //matches方法返回true的，就运行哪个方法
-    @Bean
-    @Conditional(WindowsCondition.class)//通过@Condition注解，符合Windows条件则实例化windowsListService
-    public ListService windowsListService(){
-        return new WindowsListService();
-    }
-
-    @Bean
-    @Conditional(LinuxCondition.class)//通过@Condition注解,符合Linux条件则实例化linuxListService
-    public ListService linuxListService(){
-        return new LinuxListService();
-    }
+@WiselyConfiguration("cn.hncu.p3.p5_annotation")
+//自定义注解，扫描的所有的bean来源于value值所对应的包路径下
+//使用@WiselyConfiguration组合注解替代@Configuration和@ComponentScan
+public class DemoConfig {
 }
 
 ```
 
-##运行
+##运行类
 
 ```
-package cn.hncu.p3.p4_conditional;
+package cn.hncu.p3.p5_annotation;
 
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 /**
  * Created with IntelliJ IDEA.
  * User: 陈浩翔.
- * Date: 2016/12/7.
- * Time: 下午 7:57.
+ * Date: 2016/12/8.
+ * Time: 下午 8:21.
  * Explain:运行类
  */
 public class Main {
     public static void main(String[] args) {
-        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(ConditionConfig.class);
-        ListService listService = context.getBean(ListService.class);
-        System.out.println(context.getEnvironment().getProperty("os.name")
-            +"系统下的列表命令为："
-                +listService.showListCmd()
-        );
+        AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(DemoConfig.class);
+        DemoService demoService = context.getBean(DemoService.class);
+        demoService.outputResult();
+        context.close();
     }
 }
 
@@ -193,4 +145,5 @@ public class Main {
 
 #运行结果
 
-![](http://img.blog.csdn.net/20161207204718970?watermark/2/text/aHR0cDovL2Jsb2cuY3Nkbi5uZXQvcXFfMjY1MjUyMTU=/font/5a6L5L2T/fontsize/400/fill/I0JBQkFCMA==/dissolve/70/gravity/SouthEast)
+![](http://img.blog.csdn.net/20161208204519300)
+

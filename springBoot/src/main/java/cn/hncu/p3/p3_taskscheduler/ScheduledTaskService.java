@@ -22,7 +22,7 @@ public class ScheduledTaskService {
         System.out.println("每隔5秒执行一次 "+dateFormat.format(new Date()));
     }
 
-    @Scheduled(cron = "0 38 22 ? * *" ) //使用cron属性可按照指定时间执行，本例指的是每天22点38分执行；
+    @Scheduled(cron = "0 07 20 ? * *" ) //使用cron属性可按照指定时间执行，本例指的是每天20点07分执行；
     //cron是UNIX和类UNIX(Linux)系统下的定时任务
     public void fixTimeExecution(){
         System.out.println("在指定时间 "+dateFormat.format(new Date())+" 执行");
