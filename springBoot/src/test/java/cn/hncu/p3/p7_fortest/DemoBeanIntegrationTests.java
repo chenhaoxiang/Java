@@ -17,7 +17,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)//在SpringJUnit4ClassRunner在Junit环境下提供Spring TextContext Framework的功能
 @ContextConfiguration(classes = {TestConfig.class})//@ContextConfiguration用来加载配置ApplicationContext，其中classes属性用来加载配置类
-@ActiveProfiles("prod")
+@ActiveProfiles("dev")
 public class DemoBeanIntegrationTests {
     @Autowired//可以使用普通的@Autowired注入Bean
     private TestBean testBean;
