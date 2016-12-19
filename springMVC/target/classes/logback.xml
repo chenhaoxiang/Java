@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- 可以这样描述配置文件的基本结构：以<configuration>开头，
+后面有零个或多个<appender>元素，有零个或多个<logger>元素，有最多一个<root>元素 -->
+<configuration debug="false" scan="true" scanPeriod="1 seconds">
+    <!-- debug : 默认为false ，设置为true时，将打印出logback内部日志信息，实时查看logback运行状态。
+    scan : 配置文件如果发生改变，将会重新加载，默认值为true；
+    scanPeriod : 检测配置文件是否有修改的时间间隔，如果没有给出时间单位，默认单位时毫秒，
+    当scan为true时，这个属性生效，默认时间间隔为1min。    -->
+
+    <contexListener class="ch.qos.logback.classic.jul.LevelChangePropagator">
+        <resetJUL>true</resetJUL>
+    </contexListener>
+
+    <jmxConfigurator/>
+
+    <appender name="console" class="ch.qos.logback.core.ConsoleAppender">
+        <!-- <appender>  是  <configuration> 的子节点，是负责写日志的组件。
+         appender 有两个必要属性 name ，class 。name指定appender 的名称， class 指定appender的全限定名
+         class 包括 ：ch.qos.logback.core.ConsoleAppender / ch.qos.logback.core.FileAppender/ ch.qos.logback.core.RollingFileAppender -->
+        <encoder>
+            <!--ch.qos.logback.core.ConsoleAppender 把日志添加到控制台，有如下节点： <encoder> : 对日志进行格式化。
+            <target> : 字符串System.out 或者 System.err, 默认 System.out;
+            ch.qos.logback.core.FileAppender 把日志添加到文件
+             ch.qos.logback.core.RollingFileAppender[常用] 滚动纪录文件，先将日志记录到指定文件，当符合某种条件时，将日志记录到其他文件-->
+            <pattern>logbak: %d{HH:mm:ss.SSS} %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <logger name="org.springframework.web" level="DEBUG"></logger>
+    <!--logger 是 <configuration> 的子节点 来设置某一个包或者具体的某一个类的日志打印级别，以及指定<appender>
+      loger 仅有一个name属性，两个可选属性 level／addtivity
+      name ： 用来指定受此loger约束的某一个包或者具体的某一个类
+      level：用来设置打印级别，大小写无关-->
+
+    <!-- 元素配置根 logger。该元素有一个 level 属性。没有 name 属性，因为已经被命名 为“root”-->
+    <!-- 默认根节点是INFO级别的日志 -->
+    <!-- root：logger的根节点，就这一个，默认名称就是root
+        level：日志级别
+        appender-ref：确定使用哪个appender
+         -->
+    <root level="info">
+        <appender-ref ref="console"></appender-ref>
+    </root>
+
+</configuration>
