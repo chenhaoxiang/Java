@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:util="http://www.springframework.org/schema/util"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+http://www.springframework.org/schema/aop
+http://www.springframework.org/schema/aop/spring-aop-3.2.xsd
+http://www.springframework.org/schema/context
+http://www.springframework.org/schema/context/spring-context-3.2.xsd
+http://www.springframework.org/schema/mvc
+http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+http://www.springframework.org/schema/util
+http://www.springframework.org/schema/util/spring-util.xsd">
+    <!-- 引入属性文件 classpath就是resource下 -->
+    <context:property-placeholder location="classpath:config.properties"  ignore-unresolvable="true"/>
+
+    <!-- 包自动扫描 不扫描Controller注解-->
+    <context:component-scan base-package="com.uifuture">
+        <!--<context:exclude-filter type="annotation"-->
+                                <!--expression="org.springframework.stereotype.Controller"/>-->
+    </context:component-scan>
+
+
+    <!--Start 慢SQL记录  数据源配置p:proxyFilters="stat-filter,log-filter"-->
+    <bean id="stat-filter" class="com.alibaba.druid.filter.stat.StatFilter">
+        <!-- 慢sql时间设置,即执行时间大于1秒的都是慢sql -->
+        <property name="slowSqlMillis" value="5"/>
+        <property name="logSlowSql" value="true"/>
+    </bean>
+    <bean id="log-filter" class="com.alibaba.druid.filter.logging.Log4jFilter">
+        <property name="dataSourceLogEnabled" value="true" />
+        <property name="statementExecutableSqlLogEnable" value="true" />
+    </bean>
+    <!--end 慢SQL记录 -->
+
+
+    <!-- 产生sqlsessionfactory -->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="configLocation" value="classpath:spring-mybatis.xml" />
+        <property name="dataSource" ref="dataSource" />
+        <property name="mapperLocations">
+            <list>
+                <value>classpath*:com/uifuture/*/mapping/*.xml</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 自动扫描mapper接口-->
+    <bean class="org.mybatis.spring.mapper.MapperScannerConfigurer"
+          p:basePackage="com.uifuture.**.dao"
+          p:sqlSessionFactoryBeanName="sqlSessionFactory" />
+
+    <!-- 配置数据源 -->
+    <bean id="dataSource" class="com.alibaba.druid.pool.DruidDataSource"
+          init-method="init" destroy-method="close"
+          p:driverClassName="${driverClassName}"
+          p:url="${jdbc_url}"
+          p:username="${jdbc_username}"
+          p:password="${jdbc_password}"
+          p:initialSize="${jdbc_init}"
+          p:minIdle="${jdbc_minIdle}"
+          p:maxActive="${jdbc_maxActive}"
+          p:filters="${druid_filters}"
+    >
+        <property name="proxyFilters">
+            <list>
+                <ref bean="stat-filter" />
+                <ref bean="log-filter" />
+            </list>
+        </property>
+    </bean>
+
+    <!--Start druid开启spring的监控 需要引入aspectjweaver包-->
+    <!--p:filters="stat,wall,log4j"   stat和wall。一个是用于监控，一个是用于防火墙。如果想使用sql防火墙，必须加上wall-->
+    <!--druid spring monitor setting-->
+    <bean id="druid-stat-interceptor" class="com.alibaba.druid.support.spring.stat.DruidStatInterceptor" />
+    <bean id="druid-stat-pointcut" class="org.springframework.aop.support.JdkRegexpMethodPointcut" scope="prototype">
+        <property name="patterns">
+            <list>
+                <!-- 配置监听的bean路径 支持方法名的拦截 -->
+                <value>com.uifuture.user.service.*</value>
+                <value>com.uifuture.user.dao.*</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 基于AspectJ的自动代理.使用AnnotationAwareAspectJAutoProxyCreator  -->
+    <!--<aop:aspectj-autoproxy proxy-target-class="true"/>-->
+    <aop:config>
+        <aop:advisor advice-ref="druid-stat-interceptor"
+                     pointcut-ref="druid-stat-pointcut" />
+        <!-- pointcut-ref="druid-stat-pointcut"在idea中报Cannot resolve Spring Pointcut 'druid-stat-pointcut'  不用管它 -->
+    </aop:config>
+    <!--End druid开启spring的监控 -->
+
+    <!-- 基于AspectJ的自动代理.使用AnnotationAwareAspectJAutoProxyCreator  -->
+    <!--proxy-target-class="true" Spring建议
+通过 <tx:annotation-driven/> 元素的 "proxy-target-class" 属性值来控制是基于接口的还是基于类的代理被创建。
+如果 "proxy-target-class" 属值被设置为 "true"，那么基于类的代理将起作用（这时需要CGLIB库cglib.jar在CLASSPATH中）。
+如果 "proxy-target-class" 属值被设置为 "false" 或者这个属性被省略，那么标准的JDK基于接口的代理将起作用。
+ 接口上的注解不能继承
+-->
+    <aop:aspectj-autoproxy proxy-target-class="true"/>
+
+
+    <!-- Spring-MVC的配置 Start-->
+    <!-- 避免IE浏览器执行AJAX时,返回JSON数据时出现下载文件的情况 -->
+    <bean id="mappingJacksonHttpMessageConverter"
+          class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+        <property name="supportedMediaTypes">
+            <list>
+                <value>text/html;charset=UTF-8</value>
+            </list>
+        </property>
+    </bean>
+    <!-- 启动Spring MVC的注解功能，完成请求和注解POJO的映射 -->
+    <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <util:list id="beanList">
+                <ref bean="mappingJacksonHttpMessageConverter" />
+            </util:list>
+        </property>
+    </bean>
+    <!--定义视图解析-->
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/views/" />
+        <property name="suffix" value=".jsp" />
+    </bean>
+
+    <!-- 对静态资源的处理 -->
+    <!--<mvc:default-servlet-handler />-->
+    <!--<mvc:resources mapping="/**" location="/static/"/>-->
+    <mvc:resources mapping="/static/**" location="/static/" />
+
+    <!-- 默认的注解映射的支持 -->
+    <!--如果没有下面这一句，会出现静态资源路径抢占视图链接！！！-->
+    <mvc:annotation-driven />
+    <!--文件上传时需要-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <property name="defaultEncoding">
+            <value>UTF-8</value>
+        </property>
+        <property name="maxUploadSize">
+            <value>32505856</value><!-- 上传文件大小限制为31M，31*1024*1024 -->
+        </property>
+        <property name="maxInMemorySize">
+            <value>4096</value>
+        </property>
+    </bean>
+    <!-- SpringMVC拦截器 -->
+
+
+    <!--END -->
+
+</beans>
