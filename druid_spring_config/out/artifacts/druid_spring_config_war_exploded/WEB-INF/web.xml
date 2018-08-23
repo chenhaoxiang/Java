@@ -1,0 +1,117 @@
+<web-app xmlns="http://java.sun.com/xml/ns/javaee"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_3_0.xsd"
+         version="3.0">
+    <display-name>UIFuture</display-name>
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath:spring.xml,classpath:spring-mybatis.xml</param-value>
+    </context-param>
+    <filter>
+        <description>字符集过滤器</description>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <description>字符集编码</description>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
+    <!--Start 开启druid的URL监控 - druid url monitor setting start -->
+    <filter>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <filter-class>com.alibaba.druid.support.http.WebStatFilter</filter-class>
+        <init-param>
+            <param-name>exclusions</param-name>
+            <!--忽略资源-->
+            <param-value>*.js,*.gif,*.jpg,*.png,*.css,*.ico,/druid/*</param-value>
+        </init-param>
+        <init-param>
+            <param-name>profileEnable</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>DruidWebStatFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+    <!--End druid url monitor setting end -->
+
+
+    <listener>
+        <description>spring监听器-上下文监听器</description>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+
+    <!--普通类获取Session -->
+    <listener>
+        <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
+    </listener>
+
+    <!-- 防止spring内存溢出监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.util.IntrospectorCleanupListener</listener-class>
+    </listener>
+
+    <!-- spring mvc servlet -->
+    <servlet>
+        <description>spring mvc servlet</description>
+        <servlet-name>springMvc</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <description>spring mvc 配置文件</description>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath:spring.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
+    <!--start 数据库性能监控  p:filters="stat -->
+    <!--spring中配置数据源  p:filters="stat,wall,log4j"   stat和wall。一个是用于监控，一个是用于防火墙。如果想使用sql防火墙，必须加上wall-->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <!--<init-param>-->
+             <!--白名单 -->
+            <!--<param-name>allow</param-name>-->
+        <!--如果是限定指定的子网里的所有ip都可以访问，那就是ip/子网掩码数。例如 192.168.1.120/24 就相当于192.168.1.*-->
+            <!--<param-value>192.168.1.120/24,127.0.0.1</param-value>-->
+        <!--</init-param>-->
+        <init-param>
+            <!-- 用户名 -->
+            <param-name>loginUsername</param-name>
+            <param-value>root</param-value>
+        </init-param>
+        <init-param>
+            <!-- 密码 -->
+            <param-name>loginPassword</param-name>
+            <param-value>chenhaoxiang</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+    <!--end 数据库性能监控 -->
+
+    <welcome-file-list>
+        <welcome-file>index</welcome-file>  <!-- 这里是index   没有后缀名-->
+    </welcome-file-list>
+    <!-- 这个Servlet的名字是myproject-dispatcher，可以有多个DispatcherServlet，是通过名字来区分的。
+    每一个DispatcherServlet有自己的WebApplicationContext上下文对象。同时保存到ServletContext中和Request对象中 -->
+    <servlet-mapping>
+        <servlet-name>springMvc</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 配置session超时时间，单位分钟 -->
+    <session-config>
+        <session-timeout>30</session-timeout>
+    </session-config>
+
+</web-app>

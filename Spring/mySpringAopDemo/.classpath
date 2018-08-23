@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/jdk1.7.0_04"/>
+	<classpathentry kind="lib" path="lib/spring-aop-4.3.2.RELEASE.jar" sourcepath="G:/廖老师JAVA培训/框架/spring/spring-framework-4.3.2.RELEASE-dist/spring-framework-4.3.2.RELEASE/libs/spring-aop-4.3.2.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-beans-4.3.2.RELEASE.jar" sourcepath="G:/廖老师JAVA培训/框架/spring/spring-framework-4.3.2.RELEASE-dist/spring-framework-4.3.2.RELEASE/libs/spring-beans-4.3.2.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-context-4.3.2.RELEASE.jar" sourcepath="G:/廖老师JAVA培训/框架/spring/spring-framework-4.3.2.RELEASE-dist/spring-framework-4.3.2.RELEASE/libs/spring-context-4.3.2.RELEASE-sources.jar"/>
+	<classpathentry kind="lib" path="lib/spring-core-4.3.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/spring-expression-4.3.2.RELEASE.jar"/>
+	<classpathentry kind="lib" path="lib/commons-logging-1.2.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjrt-1.8.9.jar"/>
+	<classpathentry kind="lib" path="lib/aspectjweaver-1.8.9.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.junit.JUNIT_CONTAINER/4"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

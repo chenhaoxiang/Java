@@ -1,3 +1,3 @@
-BasicDataSource´´½¨DataSource(DBCPÁ¬½Ó³ØÅäÖÃ)
-ComboPooledDataSource(C3P0Á¬½Ó³ØÅäÖÃ)
-ApacheµÄDBUtils¿ò¼ÜÊ¹ÓÃ
+ï»¿BasicDataSourceåˆ›å»ºDataSource(DBCPè¿æ¥æ± é…ç½®)
+ComboPooledDataSource(C3P0è¿æ¥æ± é…ç½®)
+Apacheçš„DBUtilsæ¡†æ¶ä½¿ç”¨
